@@ -1218,7 +1218,6 @@ const ArrayListLanguage = [
 		'name': 'IDL',
 		'type': 'programming',
 		'extensions': [
-			'.pro',
 			'.dlm'
 		]
 	},
@@ -1236,7 +1235,6 @@ const ArrayListLanguage = [
 			'.ini',
 			'.cfg',
 			'.prefs',
-			'.pro',
 			'.properties'
 		]
 	},
@@ -2301,7 +2299,6 @@ const ArrayListLanguage = [
 		'type': 'programming',
 		'extensions': [
 			'.pl',
-			'.pro',
 			'.prolog',
 			'.yap'
 		]
