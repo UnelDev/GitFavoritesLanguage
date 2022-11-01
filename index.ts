@@ -33,8 +33,9 @@ async function mixMap(listMap: Array<Promise<Map<string, { additions: number, de
     console.log('mix all ' + listMap.length + ' data');
     // it's a final map
     const Global = new Map<string, { additions: number, deletions: number }>();
+    let total: { additions: number, deletions: number } = { additions: 0, deletions: 0 }
     // await Promise.all -> for create a async forEach
-    const test = listMap.map(async Element => {
+    const sleep = listMap.map(async Element => {
         // calback of map
         return new Promise(async (resolve) => {
             // Element is a promise<map> create forEach of map 
@@ -48,13 +49,14 @@ async function mixMap(listMap: Array<Promise<Map<string, { additions: number, de
                     const del: number = Global.get(keys).deletions + values.deletions;
                     Global.set(keys, { additions: add, deletions: del })
                 }
+                total = { additions: total.additions + values.additions, deletions: total.deletions + values.deletions }
             });
             resolve(true);
         })
     });
-    await Promise.all(test);
+    await Promise.all(sleep);
+    Global.set('total', total);
     return Global;
-
 }
 async function getComit(owner: string, repo: string, hash: string) {
     const res = await octokit.request('GET /repos/{owner}/{repo}/commits/{ref}', {
@@ -82,7 +84,7 @@ async function getComit(owner: string, repo: string, hash: string) {
     return (nameFile);
 }
 async function getRate() {
-    console.log((await octokit.request('GET /rate_limit', {})).data);
+    return (await octokit.request('GET /rate_limit', {})).data;
 }
 async function listComit(owner: string, repo: string, author?: string) {
     let listRepo = [];
@@ -146,3 +148,5 @@ async function listAllComitOfUser(userName: string) {
     const size1 = await getRate();
     await listAllComitOfUser('UnelDev');
     const size2 = await getRate();
+    console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
+})();
