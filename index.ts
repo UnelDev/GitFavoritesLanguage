@@ -1,4 +1,3 @@
-const axios = require('axios');
 import { Octokit } from "octokit";
 import ArrayListLanguage from "./Programming_Languages_Extensions";
 const octokit = new Octokit({
@@ -143,5 +142,7 @@ async function listAllComitOfUser(userName: string) {
 // listComit('Menu-Vaucanson', 'Mobile', 'Wiwok');
 // listComit('UnelDev', 'MasterMind');
 // getListRepoOfOrg('Menu-Vaucanson');
-listAllComitOfUser('UnelDev');
-// getRate();
+(async () => {
+    const size1 = await getRate();
+    await listAllComitOfUser('UnelDev');
+    const size2 = await getRate();
