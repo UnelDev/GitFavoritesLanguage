@@ -13,15 +13,21 @@ async function listLanguage(user: string, repo: string) {
     console.log(res.data)
 }
 async function getListRepo(user: string) {
-    const res = await axios.get('https://api.github.com/users/' + user + '/repos');
+    const res = await octokit.request('GET /users/{username}/repos', {
+        username: user
+    });
     return res.data;
 }
 async function getListOrgs(user: string) {
-    const res = await axios.get('https://api.github.com/users/' + user + '/orgs');
+    const res = await octokit.request('GET /users/{username}/orgs', {
+        username: user
+    });
     return res.data;
 }
 async function getListRepoOfOrg(org: string) {
-    const res = await axios.get('https://api.github.com/orgs/' + org + '/repos');
+    const res = await octokit.request('GET /orgs/{org}/repos', {
+        org: org
+    });
     return res.data;
 }
 async function mixMap(listMap: Array<Promise<Map<string, { additions: number, deletions: number }>>>) {
@@ -75,6 +81,9 @@ async function getComit(owner: string, repo: string, hash: string) {
         }
     })
     return (nameFile);
+}
+async function getRate() {
+    console.log((await octokit.request('GET /rate_limit', {})).data);
 }
 async function listComit(owner: string, repo: string, author?: string) {
     let listRepo = [];
@@ -134,4 +143,5 @@ async function listAllComitOfUser(userName: string) {
 // listComit('Menu-Vaucanson', 'Mobile', 'Wiwok');
 // listComit('UnelDev', 'MasterMind');
 // getListRepoOfOrg('Menu-Vaucanson');
-listAllComitOfUser('Wiwok');
+listAllComitOfUser('UnelDev');
+// getRate();
