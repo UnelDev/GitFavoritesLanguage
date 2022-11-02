@@ -12,22 +12,58 @@ async function listLanguage(user: string, repo: string) {
     console.log(res.data)
 }
 async function getListRepo(user: string) {
-    const res = await octokit.request('GET /users/{username}/repos', {
-        username: user
-    });
-    return res.data;
+    let loop: boolean = true;
+    let loopIndex: number = 1;
+    let listRepo = [];
+    while (loop) {
+        const res = await octokit.request('GET /users/{username}/repos', {
+            username: user,
+            per_page: 100,
+            page: loopIndex
+        });
+        listRepo = listRepo.concat(res.data);
+        if (res.data.length < 30) {
+            loop = false;
+        }
+        loopIndex++;
+    }
+    return listRepo;
 }
 async function getListOrgs(user: string) {
-    const res = await octokit.request('GET /users/{username}/orgs', {
-        username: user
-    });
-    return res.data;
+    let loop: boolean = true;
+    let loopIndex: number = 1;
+    let listOrgs = [];
+    while (loop) {
+        const res = await octokit.request('GET /users/{username}/orgs', {
+            username: user,
+            per_page: 100,
+            page: loopIndex
+        });
+        listOrgs = listOrgs.concat(res.data);
+        if (res.data.length < 30) {
+            loop = false;
+        }
+        loopIndex++;
+    }
+    return listOrgs;
 }
 async function getListRepoOfOrg(org: string) {
-    const res = await octokit.request('GET /orgs/{org}/repos', {
-        org: org
-    });
-    return res.data;
+    let loop: boolean = true;
+    let loopIndex: number = 1;
+    let listRepo = [];
+    while (loop) {
+        const res = await octokit.request('GET /orgs/{org}/repos', {
+            org: org,
+            per_page: 100,
+            page: loopIndex
+        });
+        listRepo = listRepo.concat(res.data);
+        if (res.data.length < 30) {
+            loop = false;
+        }
+        loopIndex++;
+    }
+    return listRepo;
 }
 async function mixMap(listMap: Array<Promise<Map<string, { additions: number, deletions: number }>>>) {
     console.log('mix all ' + listMap.length + ' data');
@@ -144,9 +180,11 @@ async function listAllComitOfUser(userName: string) {
 // listComit('Menu-Vaucanson', 'Mobile', 'Wiwok');
 // listComit('UnelDev', 'MasterMind');
 // getListRepoOfOrg('Menu-Vaucanson');
+
 (async () => {
-    const size1 = await getRate();
-    await listAllComitOfUser('UnelDev');
-    const size2 = await getRate();
-    console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
+    console.log(await getRate());
+    // const size1 = await getRate();
+    // await listAllComitOfUser('UnelDev');
+    // const size2 = await getRate();
+    // console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
 })();
