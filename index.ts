@@ -1,5 +1,5 @@
 import { Octokit } from "octokit";
-import ArrayListLanguage from "./Programming_Languages_Extensions";
+import ListLanguage from "./listLanguage";
 const octokit = new Octokit({
     auth: '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'
 })
@@ -104,17 +104,16 @@ async function getComit(owner: string, repo: string, hash: string) {
     res.data.files.forEach(element => {
         if (element.filename.includes('.')) {
             let extention: string = '.' + element.filename.split('.')[element.filename.split('.').length - 1];
-            ArrayListLanguage.forEach((el) => {
-                if (typeof el.extensions != 'undefined' && el.extensions.includes(extention)) {
-                    if (typeof nameFile.get(el.name) == 'undefined') {
-                        nameFile.set(el.name, { additions: element.additions, deletions: element.deletions });
-                    } else {
-                        const add: number = nameFile.get(el.name).additions + element.additions;
-                        const del: number = nameFile.get(el.name).deletions + element.deletions;
-                        nameFile.set(el.name, { additions: add, deletions: del })
-                    }
+            const lang = ListLanguage.get(extention);
+            if (typeof lang != 'undefined') {
+                if (typeof nameFile.get(lang.language) == 'undefined') {
+                    nameFile.set(lang.language, { additions: element.additions, deletions: element.deletions });
+                } else {
+                    const add: number = nameFile.get(lang.language).additions + element.additions;
+                    const del: number = nameFile.get(lang.language).deletions + element.deletions;
+                    nameFile.set(lang.language, { additions: add, deletions: del })
                 }
-            });
+            }
         }
     })
     return (nameFile);
@@ -182,8 +181,9 @@ async function listAllComitOfUser(userName: string) {
 // getListRepoOfOrg('Menu-Vaucanson');
 
 (async () => {
-    console.log(await getRate());
-    // const size1 = await getRate();
+    console.log('start');
+    const size1 = await getRate();
+    console.log(size1);
     // await listAllComitOfUser('UnelDev');
     // const size2 = await getRate();
     // console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
