@@ -105,7 +105,7 @@ async function getComit(owner: string, repo: string, hash: string) {
         if (element.filename.includes('.')) {
             let extention: string = '.' + element.filename.split('.')[element.filename.split('.').length - 1];
             const lang = ListLanguage.get(extention);
-            if (typeof lang != 'undefined') {
+            if (typeof lang != 'undefined' && (lang.type == 'programming' || lang.type == 'markup')) {
                 if (typeof nameFile.get(lang.language) == 'undefined') {
                     nameFile.set(lang.language, { additions: element.additions, deletions: element.deletions });
                 } else {
@@ -172,7 +172,7 @@ async function listAllComitOfUser(userName: string) {
     });
     await Promise.all(sleep);
     await Promise.all(sleep2);
-    console.log('processing of ' + comits.length + ' comit');
+    console.log('reading of ' + comits.length + ' comit');
     console.log('please wait');
     console.log(await mixMap(comits));
 }
@@ -183,8 +183,8 @@ async function listAllComitOfUser(userName: string) {
 (async () => {
     console.log('start');
     const size1 = await getRate();
-    console.log(size1);
-    // await listAllComitOfUser('UnelDev');
-    // const size2 = await getRate();
-    // console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
+    // console.log(size1);
+    await listAllComitOfUser('UnelDev');
+    const size2 = await getRate();
+    console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
 })();
