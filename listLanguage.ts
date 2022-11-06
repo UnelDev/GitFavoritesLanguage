@@ -29284,7 +29284,8 @@ const ListLanguage = new Map([
             "extensions": [
                 ".ts",
                 ".cts",
-                ".mts"
+                ".mts",
+                ".tsx"
             ],
             "tm_scope": "source.ts",
             "ace_mode": "typescript",
@@ -29309,7 +29310,8 @@ const ListLanguage = new Map([
             "extensions": [
                 ".ts",
                 ".cts",
-                ".mts"
+                ".mts",
+                ".tsx"
             ],
             "tm_scope": "source.ts",
             "ace_mode": "typescript",
@@ -44196,6 +44198,33 @@ const ListLanguage = new Map([
             "tm_scope": "source.harbour",
             "ace_mode": "text",
             "language_id": 421
+        }
+    ],
+    // add by me
+    [
+        ".tsx",
+        {
+            "language": "TypeScript:",
+            "type": "programming",
+            "color": "#3178c6",
+            "aliases": [
+                "ts"
+            ],
+            "interpreters": [
+                "deno",
+                "ts-node"
+            ],
+            "extensions": [
+                ".ts",
+                ".cts",
+                ".mts",
+                ".tsx"
+            ],
+            "tm_scope": "source.ts",
+            "ace_mode": "typescript",
+            "codemirror_mode": "javascript",
+            "codemirror_mime_type": "application/typescript",
+            "language_id": 378
         }
     ]
 ]);

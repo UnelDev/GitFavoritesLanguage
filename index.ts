@@ -1,7 +1,7 @@
 import { Octokit } from "octokit";
 import ListLanguage from "./listLanguage";
 const octokit = new Octokit({
-    auth: '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'
+    auth: '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'
 })
 async function listLanguage(user: string, repo: string) {
     const res = await octokit.request('GET /repos/{owner}/{repo}/languages', {
