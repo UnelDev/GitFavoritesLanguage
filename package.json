@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/UnelDev/GitFavoritesLanguage#readme",
   "dependencies": {
+    "dotenv": "^16.0.3",
     "octokit": "^2.0.10"
   }
 }

@@ -1,7 +1,9 @@
 import { Octokit } from "octokit";
 import ListLanguage from "./listLanguage";
+require('dotenv').config({ path: __dirname + '/.env' });
 const octokit = new Octokit({
-    auth: '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'
+    auth: process.env.TOKEN1
+    // auth: process.env.TOKEN2;
 })
 async function listLanguage(user: string, repo: string) {
     const res = await octokit.request('GET /repos/{owner}/{repo}/languages', {
