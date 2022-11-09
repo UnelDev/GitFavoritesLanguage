@@ -4,15 +4,26 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const octokit = new Octokit({
     auth: process.env.TOKEN1
     // auth: process.env.TOKEN2;
-})
+});
+/**
+ * return a list language of repo in user
+ * @param {string} user unsername of target user
+ * @param {string} repo name of target repo of user
+ * @returns return : {name:byte, name2:byte}
+ */
 async function listLanguage(user: string, repo: string) {
     const res = await octokit.request('GET /repos/{owner}/{repo}/languages', {
         owner: user,
         repo: repo
     });
-    console.log('language of ' + repo);
-    console.log(res.data)
+    return res.data
 }
+
+/**
+ * return a list of repo of user
+ * @param  {string} user unsername of target user
+ * @returns Array of repo object
+ */
 async function getListRepo(user: string) {
     let loop: boolean = true;
     let loopIndex: number = 1;
@@ -31,6 +42,11 @@ async function getListRepo(user: string) {
     }
     return listRepo;
 }
+/**
+ * lis all organisation of user
+ * @param  {string} user unsername of target user
+ * @returns Array of organisation object
+ */
 async function getListOrgs(user: string) {
     let loop: boolean = true;
     let loopIndex: number = 1;
@@ -49,6 +65,12 @@ async function getListOrgs(user: string) {
     }
     return listOrgs;
 }
+
+/**
+ * list repo of organisation
+ * @param {string} org name of organisation
+ * @returns Array of organisation
+ */
 async function getListRepoOfOrg(org: string) {
     let loop: boolean = true;
     let loopIndex: number = 1;
@@ -67,6 +89,11 @@ async function getListRepoOfOrg(org: string) {
     }
     return listRepo;
 }
+/**
+ * for mix response of getComit()
+ * @param {Array<Promise<Map<string, { additions: number, deletions: number }>>>} listMap list stats of repo
+ * @returns {Array<Promise<Map<string, { additions: number, deletions: number }>>>}
+ */
 async function mixMap(listMap: Array<Promise<Map<string, { additions: number, deletions: number }>>>) {
     console.log('mix all ' + listMap.length + ' data');
     // it's a final map
@@ -96,6 +123,13 @@ async function mixMap(listMap: Array<Promise<Map<string, { additions: number, de
     Global.set('total', total);
     return Global;
 }
+/**
+ * list all language in commit
+ * @param owner owner of repo
+ * @param repo name of repo
+ * @param hash ref of repo
+ * @returns map<nameofLanguage,{ additions:number, deletions:number }>
+ */
 async function getComit(owner: string, repo: string, hash: string) {
     const res = await octokit.request('GET /repos/{owner}/{repo}/commits/{ref}', {
         owner: owner,
@@ -120,9 +154,20 @@ async function getComit(owner: string, repo: string, hash: string) {
     })
     return (nameFile);
 }
+/**
+ * for check stats of token
+ * @returns stat of token
+ */
 async function getRate() {
     return (await octokit.request('GET /rate_limit', {})).data;
 }
+/**
+ * 
+ * @param owner owner of repo
+ * @param repo target repo
+ * @param {String|undefined} author filter the response
+ * @returns map<nameofLanguage,{ additions:number, deletions:number }>
+ */
 async function listComit(owner: string, repo: string, author?: string) {
     let listRepo = [];
     let loop: boolean = true;
@@ -145,6 +190,10 @@ async function listComit(owner: string, repo: string, author?: string) {
         return getComit(owner, repo, element.sha);
     });
 }
+/**
+ * log the language used by username
+ * @param {string} userName 
+ */
 async function listAllComitOfUser(userName: string) {
     console.log('list of repo where ' + userName + ' have contributed');
     // //list orgs of username
@@ -184,9 +233,10 @@ async function listAllComitOfUser(userName: string) {
 
 (async () => {
     console.log('start');
-    const size1 = await getRate();
-    // console.log(size1);
-    await listAllComitOfUser('UnelDev');
-    const size2 = await getRate();
-    console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
+    console.log(await getListRepo('unelDev'));
+    // const size1 = await getRate();
+    // // console.log(size1);
+    // await listAllComitOfUser('UnelDev');
+    // const size2 = await getRate();
+    // console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
 })();
