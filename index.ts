@@ -7,11 +7,12 @@ const octokit = new Octokit({
 });
 /**
  * return a list language of repo in user
+ * @remarks use https://docs.github.com/en/rest/repos/repos#list-repository-languages
  * @param {string} user unsername of target user
  * @param {string} repo name of target repo of user
  * @returns return : {name:byte, name2:byte}
  */
-async function listLanguage(user: string, repo: string) {
+async function listRepoLanguage(user: string, repo: string) {
     const res = await octokit.request('GET /repos/{owner}/{repo}/languages', {
         owner: user,
         repo: repo
@@ -21,6 +22,7 @@ async function listLanguage(user: string, repo: string) {
 
 /**
  * return a list of repo of user
+ * @remarks use https://docs.github.com/en/rest/repos/repos#list-repositories-for-a-user
  * @param  {string} user unsername of target user
  * @returns Array of repo object
  */
@@ -44,6 +46,7 @@ async function getListRepo(user: string) {
 }
 /**
  * lis all organisation of user
+ * @remarks use https://docs.github.com/en/rest/orgs/orgs#list-organizations-for-a-user
  * @param  {string} user unsername of target user
  * @returns Array of organisation object
  */
@@ -68,6 +71,7 @@ async function getListOrgs(user: string) {
 
 /**
  * list repo of organisation
+ * @remarks use https://docs.github.com/en/rest/repos/repos#list-organization-repositories
  * @param {string} org name of organisation
  * @returns Array of organisation
  */
@@ -125,6 +129,7 @@ async function mixMap(listMap: Array<Promise<Map<string, { additions: number, de
 }
 /**
  * list all language in commit
+ * @remarks use https://docs.github.com/en/rest/commits/commits#list-commits
  * @param owner owner of repo
  * @param repo name of repo
  * @param hash ref of repo
@@ -155,14 +160,15 @@ async function getComit(owner: string, repo: string, hash: string) {
     return (nameFile);
 }
 /**
- * for check stats of token
+ * for check stats of token  
+ * @remarks use https://docs.github.com/en/rest/rate-limit#get-rate-limit-status-for-the-authenticated-user
  * @returns stat of token
  */
 async function getRate() {
     return (await octokit.request('GET /rate_limit', {})).data;
 }
 /**
- * 
+ * @remarks use https://docs.github.com/en/rest/commits/commits#list-commits
  * @param owner owner of repo
  * @param repo target repo
  * @param {String|undefined} author filter the response
