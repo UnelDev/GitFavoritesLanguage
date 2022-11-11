@@ -24,9 +24,10 @@ async function listRepoLanguage(user: string, repo: string) {
  * return a list of repo of user
  * @remarks use https://docs.github.com/en/rest/repos/repos#list-repositories-for-a-user
  * @param  {string} user unsername of target user
+ *  @param  {string} exclude list of exlude repos
  * @returns Array of repo object
  */
-async function getListRepo(user: string) {
+async function getListRepo(user: string, exclude?: Array<string>) {
     let loop: boolean = true;
     let loopIndex: number = 1;
     let listRepo = [];
@@ -36,7 +37,18 @@ async function getListRepo(user: string) {
             per_page: 100,
             page: loopIndex
         });
-        listRepo = listRepo.concat(res.data);
+        console.log(res.data);
+        let iseEclude = false;
+        if (exclude) {
+            res.data.forEach(element => {
+                if (exclude.includes(element.name)) {
+                    iseEclude = true;
+                }
+            });
+        }
+        if (!iseEclude) {
+            listRepo = listRepo.concat(res.data);
+        }
         if (res.data.length < 30) {
             loop = false;
         }
@@ -221,7 +233,7 @@ async function listAllComitOfUser(userName: string) {
 
     // and list all comit creted in his repo
 
-    const sleep2 = (await getListRepo(userName)).map(async Repo => {
+    const sleep2 = (await getListRepo(userName, ['cryptoBot', 'tchat-v5.2'])).map(async Repo => {
         // add comit of his repo
         const comitIn = await listComit(userName, Repo.name, userName);
         console.log('in ' + userName + '/' + Repo.name + ' : ' + comitIn.length + ' commit');
@@ -239,10 +251,9 @@ async function listAllComitOfUser(userName: string) {
 
 (async () => {
     console.log('start');
-    console.log(await getListRepo('unelDev'));
-    // const size1 = await getRate();
-    // // console.log(size1);
-    // await listAllComitOfUser('UnelDev');
-    // const size2 = await getRate();
-    // console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
+    const size1 = await getRate();
+    // console.log(size1);
+    await listAllComitOfUser('UnelDev');
+    const size2 = await getRate();
+    console.log('consume ' + (size2.rate.used - size1.rate.used) + ' request, left ' + size2.rate.remaining);
 })();
