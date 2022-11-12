@@ -37,7 +37,6 @@ async function getListRepo(user: string, exclude?: Array<string>) {
             per_page: 100,
             page: loopIndex
         });
-        console.log(res.data);
         let iseEclude = false;
         if (exclude) {
             res.data.forEach(element => {
@@ -186,7 +185,7 @@ async function getRate() {
  * @param {String|undefined} author filter the response
  * @returns map<nameofLanguage,{ additions:number, deletions:number }>
  */
-async function listComit(owner: string, repo: string, author?: string) {
+async function listComit(owner: string, repo: string, author?: string, exclude?: Array<string>) {
     let listRepo = [];
     let loop: boolean = true;
     let loopIndex: number = 1;
@@ -198,7 +197,17 @@ async function listComit(owner: string, repo: string, author?: string) {
             per_page: 100,
             page: loopIndex
         });
-        listRepo = listRepo.concat(res.data);
+        let iseEclude = false;
+        if (exclude) {
+            res.data.forEach(element => {
+                if (exclude.includes(element.name)) {
+                    iseEclude = true;
+                }
+            });
+        }
+        if (!iseEclude) {
+            listRepo = listRepo.concat(res.data);
+        }
         if (res.data.length < 30) {
             loop = false;
         }
@@ -233,7 +242,7 @@ async function listAllComitOfUser(userName: string) {
 
     // and list all comit creted in his repo
 
-    const sleep2 = (await getListRepo(userName, ['cryptoBot', 'tchat-v5.2'])).map(async Repo => {
+    const sleep2 = (await getListRepo(userName)).map(async Repo => {
         // add comit of his repo
         const comitIn = await listComit(userName, Repo.name, userName);
         console.log('in ' + userName + '/' + Repo.name + ' : ' + comitIn.length + ' commit');
