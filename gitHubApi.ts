@@ -196,18 +196,15 @@ async function listComit(owner: string, repo: string, author?: string, exclude?:
             per_page: 100,
             page: loopIndex
         });
-        const data = array<any>;
+        const data: Array<any> = [];
         if (typeof exclude != 'undefined') {
-            console.log('test');
             res.data.forEach(element => {
                 if (!exclude.includes(element.sha)) {
                     data.push(element);
                 }
             });
         }
-        if (!iseEclude) {
-            listRepo = listRepo.concat(data);
-        }
+        listRepo = listRepo.concat(data);
         if (res.data.length < 30) {
             loop = false;
         }
