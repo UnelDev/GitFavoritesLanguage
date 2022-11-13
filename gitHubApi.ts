@@ -106,12 +106,12 @@ async function getListRepoOfOrg(org: string) {
 }
 /**
  * for mix response of getComit()
- * @param {Array<Promise<Map<string, { additions: number, deletions: number }>>>} listMap list stats of repo
- * @returns {Array<Promise<Map<string, { additions: number, deletions: number }>>>}
+ * @param {Array<Promise<Map<string, { additions: number, deletions: number, color?: string  }>>>} listMap list stats of repo
+ * @returns {Array<Promise<Map<string, { additions: number, deletions: number, color?: string  }>>>}
  */
-async function mixMap(listMap: Array<Promise<Map<string, { additions: number, deletions: number }>>>) {
+async function mixMap(listMap: Array<Promise<Map<string, { additions: number, deletions: number, color?: string }>>>) {
     // it's a final map
-    const Global = new Map<string, { additions: number, deletions: number }>();
+    const Global = new Map<string, { additions: number, deletions: number, color?: string }>();
     let total: { additions: number, deletions: number } = { additions: 0, deletions: 0 }
     // await Promise.all -> for create a async forEach
     const sleep = listMap.map(async Element => {
@@ -121,12 +121,12 @@ async function mixMap(listMap: Array<Promise<Map<string, { additions: number, de
             (await Element).forEach((values, keys) => {
                 // if this language dosent exist in global
                 if (typeof Global.get(keys) == 'undefined') {
-                    Global.set(keys, { additions: values.additions, deletions: values.deletions });
+                    Global.set(keys, { additions: values.additions, deletions: values.deletions, color: values.color });
                 } else {
                     //add value at global
                     const add: number = Global.get(keys).additions + values.additions;
                     const del: number = Global.get(keys).deletions + values.deletions;
-                    Global.set(keys, { additions: add, deletions: del })
+                    Global.set(keys, { additions: add, deletions: del, color: values.color })
                 }
                 total = { additions: total.additions + values.additions, deletions: total.deletions + values.deletions }
             });
@@ -151,18 +151,18 @@ async function getComit(owner: string, repo: string, hash: string) {
         repo: repo,
         ref: hash
     })
-    const nameFile = new Map<string, { additions: number, deletions: number }>();
+    const nameFile = new Map<string, { additions: number, deletions: number, color?: string }>();
     res.data.files.forEach(element => {
         if (element.filename.includes('.')) {
             let extention: string = '.' + element.filename.split('.')[element.filename.split('.').length - 1];
             const lang = ListLanguage.get(extention);
             if (typeof lang != 'undefined' && (lang.type == 'programming' || lang.type == 'markup')) {
                 if (typeof nameFile.get(lang.language) == 'undefined') {
-                    nameFile.set(lang.language, { additions: element.additions, deletions: element.deletions });
+                    nameFile.set(lang.language, { additions: element.additions, deletions: element.deletions, color: lang.color });
                 } else {
                     const add: number = nameFile.get(lang.language).additions + element.additions;
                     const del: number = nameFile.get(lang.language).deletions + element.deletions;
-                    nameFile.set(lang.language, { additions: add, deletions: del })
+                    nameFile.set(lang.language, { additions: add, deletions: del, color: lang.color })
                 }
             }
         }

@@ -2,6 +2,7 @@ import listAllComitOfUser, { getRate } from "./gitHubApi";
 import * as fs from 'fs';
 require('dotenv').config({ path: __dirname + '/.env' });
 const path = require('path');
+
 async function createProgress(username: string, DirName: string) {
   let progress: string = `
     <svg
@@ -84,7 +85,7 @@ async function createProgress(username: string, DirName: string) {
     <svg data-testid="lang-items" x="25">
     
 `;
-  const language = await listAllComitOfUser(username, undefined, ['0d14e31e796610802d493632c0b69cb5cfea30cf', '88cbbd4b8dcee8178f4b2ae17ebb753d4895df02']);
+  const language = await listAllComitOfUser(username, undefined, ['0d14e31e796610802d493632c0b69cb5cfea30cf', '88cbbd4b8dcee8178f4b2ae17ebb753d4895df02', '90f8760e0a24b796c8b167a539bce6d646ec516b', '06781b99855a9591c9eca997d79bba71eb2c3de6']);
   let i = 0;
   console.log(language);
   console.log('sorting');
@@ -103,7 +104,7 @@ async function createProgress(username: string, DirName: string) {
         <rect rx="5" ry="5" x="0" y="0" width="205" height="8" fill="#ddd"></rect>
         <rect
         height="8"
-        fill="#e34c26"
+        fill="${values.color ? values.color : '7f8ca6'}"
         rx="5" ry="5" x="0" y="0"
         data-testid="lang-progress"
         width="${((values.additions / language.get('total').additions) * 100).toFixed(2)}%"
@@ -122,4 +123,4 @@ async function createProgress(username: string, DirName: string) {
   console.log(progress);
 }
 console.log('start');
-createProgress('unelDev', process.env.PATH);
+createProgress('Wiwok', process.env.PATH);

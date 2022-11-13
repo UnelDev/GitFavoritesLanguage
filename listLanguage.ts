@@ -1907,28 +1907,28 @@ const ListLanguage = new Map([
             "language_id": 41
         }
     ],
-    [
-        ".h",
-        {
-            "language": "Objective-C:",
-            "type": "programming",
-            "tm_scope": "source.objc",
-            "color": "#438eff",
-            "aliases": [
-                "obj-c",
-                "objc",
-                "objectivec"
-            ],
-            "extensions": [
-                ".m",
-                ".h"
-            ],
-            "ace_mode": "objectivec",
-            "codemirror_mode": "clike",
-            "codemirror_mime_type": "text/x-objectivec",
-            "language_id": 257
-        }
-    ],
+    // [
+    //     ".h",
+    //     {
+    //         "language": "Objective-C:",
+    //         "type": "programming",
+    //         "tm_scope": "source.objc",
+    //         "color": "#438eff",
+    //         "aliases": [
+    //             "obj-c",
+    //             "objc",
+    //             "objectivec"
+    //         ],
+    //         "extensions": [
+    //             ".m",
+    //             ".h"
+    //         ],
+    //         "ace_mode": "objectivec",
+    //         "codemirror_mode": "clike",
+    //         "codemirror_mime_type": "text/x-objectivec",
+    //         "language_id": 257
+    //     }
+    // ],
     [
         ".idc",
         {
@@ -2263,6 +2263,42 @@ const ListLanguage = new Map([
             "tm_scope": "source.hack",
             "color": "#878787",
             "language_id": 153
+        }
+    ],
+    [
+        ".h",
+        {
+            "language": "C++:",
+            "type": "programming",
+            "tm_scope": "source.c++",
+            "ace_mode": "c_cpp",
+            "codemirror_mode": "clike",
+            "codemirror_mime_type": "text/x-c++src",
+            "color": "#f34b7d",
+            "aliases": [
+                "cpp"
+            ],
+            "extensions": [
+                ".cpp",
+                ".c++",
+                ".cc",
+                ".cp",
+                ".cxx",
+                ".h",
+                ".h++",
+                ".hh",
+                ".hpp",
+                ".hxx",
+                ".inc",
+                ".inl",
+                ".ino",
+                ".ipp",
+                ".ixx",
+                ".re",
+                ".tcc",
+                ".tpp"
+            ],
+            "language_id": 43
         }
     ],
     [
@@ -10522,6 +10558,7 @@ const ListLanguage = new Map([
         {
             "language": "QMake:",
             "type": "programming",
+            "color": "#11a10e",
             "extensions": [
                 ".pro",
                 ".pri"
@@ -21688,6 +21725,7 @@ const ListLanguage = new Map([
         {
             "language": "QMake:",
             "type": "programming",
+            "color": "#11a10e",
             "extensions": [
                 ".pro",
                 ".pri"
