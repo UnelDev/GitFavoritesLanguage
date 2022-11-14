@@ -84,9 +84,10 @@ async function getListOrgs(user: string) {
  * list repo of organisation
  * @remarks use https://docs.github.com/en/rest/repos/repos#list-organization-repositories
  * @param {string} org name of organisation
+ * @param {Array<string> } exclude of organisation
  * @returns Array of organisation
  */
-async function getListRepoOfOrg(org: string) {
+async function getListRepoOfOrg(org: string, exclude?: Array<string>) {
     let loop: boolean = true;
     let loopIndex: number = 1;
     let listRepo = [];
@@ -96,7 +97,15 @@ async function getListRepoOfOrg(org: string) {
             per_page: 100,
             page: loopIndex
         });
-        listRepo = listRepo.concat(res.data);
+        const data: Array<any> = [];
+        if (typeof exclude != 'undefined') {
+            res.data.forEach(element => {
+                if (!exclude.includes(element.name)) {
+                    data.push(element);
+                }
+            });
+        }
+        listRepo = listRepo.concat(data);
         if (res.data.length < 30) {
             loop = false;
         }
@@ -226,7 +235,7 @@ async function listAllComitOfUser(userName: string, excludeRepo?: Array<string>,
     // in first list all comit created by user in orgs 
     const sleep = orgs.map(async Org => {
         // list of repo of orgs
-        const sleep1 = (await getListRepoOfOrg(Org.login)).map(async Repo => {
+        const sleep1 = (await getListRepoOfOrg(Org.login, ['Desktop'])).map(async Repo => {
             // add comit of this repo
             const comitIn = await listComit(Org.login, Repo.name, userName, excludeComit);
             comits = comits.concat(comitIn);

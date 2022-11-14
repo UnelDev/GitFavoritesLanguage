@@ -4,6 +4,7 @@ require('dotenv').config({ path: __dirname + '/.env' });
 const path = require('path');
 
 async function createProgress(username: string, DirName: string) {
+
   let progress: string = `
     <svg
     width="300"
@@ -87,8 +88,6 @@ async function createProgress(username: string, DirName: string) {
 `;
   const language = await listAllComitOfUser(username, undefined, ['0d14e31e796610802d493632c0b69cb5cfea30cf', '88cbbd4b8dcee8178f4b2ae17ebb753d4895df02', '90f8760e0a24b796c8b167a539bce6d646ec516b', '06781b99855a9591c9eca997d79bba71eb2c3de6']);
   let i = 0;
-  console.log(language);
-  console.log('sorting');
   const sortLanguage = new Map(Array.from(language).sort((a, b) => a[1].additions - b[1].additions).reverse());
   sortLanguage.delete('total');
   console.log(sortLanguage);
@@ -120,7 +119,8 @@ async function createProgress(username: string, DirName: string) {
   
     </g>
   </svg>`;
+  fs.writeFileSync(path.join(DirName, 'gitFavoritesLanguages' + username + '.svg'), progress);
   console.log(progress);
 }
 console.log('start');
-createProgress('Wiwok', process.env.PATH);
+createProgress('UnelDev', process.env.SAVEPATH);
