@@ -120,7 +120,6 @@ async function createProgress(username: string, DirName: string) {
     </g>
   </svg>`;
   fs.writeFileSync(path.join(DirName, 'gitFavoritesLanguages' + username + '.svg'), progress);
-  console.log(progress);
 }
 console.log('start');
 createProgress('UnelDev', process.env.SAVEPATH);
